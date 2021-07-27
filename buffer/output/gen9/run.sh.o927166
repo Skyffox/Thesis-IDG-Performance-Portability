@@ -1,0 +1,21 @@
+
+########################################################################
+#      Date:           Wed 14 Jul 2021 01:54:35 AM PDT
+#    Job ID:           927166.v-qsvr-1.aidevcloud
+#      User:           u69896
+# Resources:           neednodes=1:gen9:ppn=2,nodes=1:gen9:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Selected device: Intel(R) UHD Graphics P630 [0x3e96]
+>> Kernel iterations: 100
+>> Object creation: 12286289
+>> Object initialisation: 21303465
+>> Buffer: 4121651
+>> Kernel duration: 187496006720
+
+
+########################################################################
+# End of output for job 927166.v-qsvr-1.aidevcloud
+# Date: Wed 14 Jul 2021 01:57:59 AM PDT
+########################################################################
+

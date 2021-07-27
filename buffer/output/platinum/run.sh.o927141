@@ -1,0 +1,21 @@
+
+########################################################################
+#      Date:           Wed Jul 14 01:48:53 PDT 2021
+#    Job ID:           927141.v-qsvr-1.aidevcloud
+#      User:           u69896
+# Resources:           neednodes=1:clx:ppn=2,nodes=1:clx:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Selected device: Intel(R) Xeon(R) Platinum 8256 CPU @ 3.80GHz
+>> Kernel iterations: 100
+>> Object creation: 9127379
+>> Object initialisation: 11482847
+>> Buffer: 3869129
+>> Kernel duration: 44846923355
+
+
+########################################################################
+# End of output for job 927141.v-qsvr-1.aidevcloud
+# Date: Wed Jul 14 01:49:48 PDT 2021
+########################################################################
+

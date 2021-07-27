@@ -1,0 +1,19 @@
+
+########################################################################
+#      Date:           Wed 14 Jul 2021 07:07:53 AM PDT
+#    Job ID:           927650.v-qsvr-1.aidevcloud
+#      User:           u69896
+# Resources:           neednodes=1:iris_xe_max:ppn=2,nodes=1:iris_xe_max:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Kernel iterations: 100
+>> Object creation: 42530
+>> Object initialisation: 29505037
+>> Kernel duration: 18044138274
+
+
+########################################################################
+# End of output for job 927650.v-qsvr-1.aidevcloud
+# Date: Wed 14 Jul 2021 07:08:16 AM PDT
+########################################################################
+

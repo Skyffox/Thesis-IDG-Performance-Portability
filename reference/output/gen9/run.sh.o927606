@@ -1,0 +1,19 @@
+
+########################################################################
+#      Date:           Wed 14 Jul 2021 06:41:31 AM PDT
+#    Job ID:           927606.v-qsvr-1.aidevcloud
+#      User:           u69896
+# Resources:           neednodes=1:gen9:ppn=2,nodes=1:gen9:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Kernel iterations: 100
+>> Object creation: 104708
+>> Object initialisation: 38748370
+>> Kernel duration: 800073619
+
+
+########################################################################
+# End of output for job 927606.v-qsvr-1.aidevcloud
+# Date: Wed 14 Jul 2021 06:41:39 AM PDT
+########################################################################
+
