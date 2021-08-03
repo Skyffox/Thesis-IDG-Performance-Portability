@@ -6,5 +6,5 @@ p.wait()
 p = Popen(["rm run.sh.*"], shell=True)
 p.wait()
 
-p = Popen(["rm run_gpu.sh.*"], shell=True)
+p = Popen(["rm rungpu.sh.*"], shell=True)
 p.wait()

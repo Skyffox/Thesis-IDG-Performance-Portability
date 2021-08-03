@@ -1,1 +1,1 @@
-./run-gridder-cpu 1
+./run-gridder-cpu

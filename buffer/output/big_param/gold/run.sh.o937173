@@ -1,0 +1,20 @@
+
+########################################################################
+#      Date:           Fri 30 Jul 2021 11:04:15 PM PDT
+#    Job ID:           937173.v-qsvr-1.aidevcloud
+#      User:           u83501
+# Resources:           neednodes=1:skl:ppn=2,nodes=1:skl:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Selected device: Intel(R) Xeon(R) Gold 6128 CPU @ 3.40GHz
+>> Object creation: 242998940
+>> Object initialisation: 315694384
+>> Buffer: 190958858
+>> Kernel duration: 10189385464
+
+
+########################################################################
+# End of output for job 937173.v-qsvr-1.aidevcloud
+# Date: Fri 30 Jul 2021 11:04:42 PM PDT
+########################################################################
+

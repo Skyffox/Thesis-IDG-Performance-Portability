@@ -1,28 +1,7 @@
 #include <cmath>
 
+#include "init.h"
 #include "gridder.h"
-#include "math.h"
-
-// NOTE: Need to redefine the exact array sizes for the GPU mapping
-// #define GRID_SIZE            1024
-// #define NR_CORRELATIONS      4
-// #define SUBGRID_SIZE         32
-// #define IMAGE_SIZE           0.01f
-// #define W_STEP               0
-// #define NR_CHANNELS          16 // number of channels per subgrid
-// #define NR_STATIONS          10
-// #define NR_TIMESLOTS         4 // NOTE: increased from 2 so we can keep the gpu busy
-// #define NR_TIMESTEPS_SUBGRID 128 // number of timesteps per subgrid
-// #define NR_TIMESTEPS         (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) // number of timesteps per baseline
-// #define NR_BASELINES         ((NR_STATIONS * (NR_STATIONS - 1)) / 2)
-// #define NR_SUBGRIDS          (NR_BASELINES * NR_TIMESLOTS)
-//
-// #define SUBGRID_S         NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE
-// #define UVW_SIZE          NR_BASELINES * NR_TIMESTEPS
-// #define VISIBILITIES_SIZE NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS * 4
-// #define ATERMS_SIZE       NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * 4
-// #define METADATA_SIZE     NR_BASELINES * NR_TIMESLOTS * 9
-// #define SPHEROIDAL_SIZE   SUBGRID_SIZE * SUBGRID_SIZE
 
 
 void kernel_gridder(
@@ -45,9 +24,15 @@ void kernel_gridder(
     const idg::Metadata m       = metadata[0];
     const int baseline_offset_1 = m.baseline_offset;
 
+    const int SUBGRID_S         = NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE;
+    const int UVW_SIZE          = NR_BASELINES * NR_TIMESTEPS;
+    const int VISIBILITIES_SIZE = NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS * 4;
+    const int ATERMS_SIZE       = NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * 4;
+    const int METADATA_SIZE     = NR_BASELINES * NR_TIMESLOTS * 9;
+    const int SPHEROIDAL_SIZE   = SUBGRID_SIZE * SUBGRID_SIZE;
+
     // Iterate all subgrids
-    // NOTE: Not needed for CPUs
-    // #pragma omp target map(from: subgrid[0:SUBGRID_S]), map(to: uvw[0:UVW_SIZE], wavenumbers[0:NR_CHANNELS], visibilities[0:VISIBILITIES_SIZE], spheroidal[0:SPHEROIDAL_SIZE], aterms[0:ATERMS_SIZE], metadata[0:METADATA_SIZE])
+    #pragma omp target map(from: subgrid[0:SUBGRID_S]), map(to: uvw[0:UVW_SIZE], wavenumbers[0:NR_CHANNELS], visibilities[0:VISIBILITIES_SIZE], spheroidal[0:SPHEROIDAL_SIZE], aterms[0:ATERMS_SIZE], metadata[0:METADATA_SIZE])
     #pragma omp parallel for
     for (int s = 0; s < nr_subgrids; s++) {
         // Load metadata

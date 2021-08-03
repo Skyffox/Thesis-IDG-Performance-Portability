@@ -1,0 +1,20 @@
+
+########################################################################
+#      Date:           Sat 31 Jul 2021 02:35:57 AM PDT
+#    Job ID:           937252.v-qsvr-1.aidevcloud
+#      User:           u83501
+# Resources:           neednodes=1:iris_xe_max:quad_gpu:ppn=2,nodes=1:iris_xe_max:quad_gpu:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Selected device: Intel(R) Iris(R) Xe MAX Graphics [0x4905]
+>> Object creation: 139259772
+>> Object initialisation: 241322212
+>> Buffer: 117081915
+>> Kernel duration: 7041325427
+
+
+########################################################################
+# End of output for job 937252.v-qsvr-1.aidevcloud
+# Date: Sat 31 Jul 2021 02:36:18 AM PDT
+########################################################################
+

@@ -24,7 +24,6 @@ void kernel_gridder(
     std::array<std::complex<float>, 4> *aterms,
     std::array<int, 9>                 *metadata,
     std::complex<float>                *subgrid)
-
 {
     // Find offset of first subgrid
     const int baseline_offset_1 = metadata[0][0];

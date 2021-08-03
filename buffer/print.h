@@ -2,9 +2,9 @@
 
 
 void printUVW(
-    const std::array<float, NR_BASELINES * NR_TIMESTEPS> u,
-    const std::array<float, NR_BASELINES * NR_TIMESTEPS> v,
-    const std::array<float, NR_BASELINES * NR_TIMESTEPS> w)
+    const std::vector<float>& u,
+    const std::vector<float>& v,
+    const std::vector<float>& w)
 {
     std::cout << ">>> Printing all UVW coordinates." << std::endl;
     for (unsigned i = 0; i < NR_BASELINES; i++) {
@@ -94,7 +94,7 @@ void printSpheroidal(
 }
 
 void printAterms(
-    const std::array<std::array<std::complex<float>, 4>, NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE> aterms)
+    const std::vector<std::array<std::complex<float>, 4>>& aterms)
 {
     std::cout << ">>> Printing all Aterms." << std::endl;
     for (unsigned ts = 0; ts < NR_TIMESLOTS; ts++) {
@@ -146,7 +146,7 @@ void printMetadata(
 }
 
 void printSubgrid(
-    std::array<std::complex<float>, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE> subgrids)
+    std::vector<std::complex<float>> subgrids)
 {
     for (unsigned s = 0; s < NR_SUBGRIDS; s++) {
         for (unsigned y = 0; y < SUBGRID_SIZE; y++) {

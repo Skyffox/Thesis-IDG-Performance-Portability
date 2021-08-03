@@ -1,0 +1,20 @@
+
+########################################################################
+#      Date:           Thu 29 Jul 2021 04:55:00 AM PDT
+#    Job ID:           936274.v-qsvr-1.aidevcloud
+#      User:           u83501
+# Resources:           neednodes=1:gen9:ppn=2,nodes=1:gen9:ppn=2,walltime=06:00:00
+########################################################################
+
+>>> Selected device: Intel(R) UHD Graphics P630 [0x3e96]
+>> Object creation: 12893350
+>> Object initialisation: 23245080
+>> Buffer: 4096034
+>> Kernel duration: 1855208563
+
+
+########################################################################
+# End of output for job 936274.v-qsvr-1.aidevcloud
+# Date: Thu 29 Jul 2021 04:55:11 AM PDT
+########################################################################
+

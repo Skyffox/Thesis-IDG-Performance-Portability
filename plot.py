@@ -15,14 +15,19 @@ from os.path import isfile, join
 
 path = "/home/julius/Downloads/idg-fpga-master/thesis/"
 
-path_buffer = path + "buffer/output/"
-path_ref = path + "reference/output/"
-path_explicit = path + "explicit/output/"
-path_implicit = path + "implicit/output/"
+# data_size = "small_param/"
+data_size = "big_param/"
 
-# NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS or
-# ((NR_STATIONS * (NR_STATIONS - 1)) / 2) * (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) * 16 = 45 * 256 * 16 = 184320
-visibilities = 184320
+path_buffer = path + "buffer/output/" + data_size
+path_ref = path + "reference/output/" + data_size
+path_explicit = path + "explicit/output/" + data_size
+path_implicit = path + "implicit/output/" + data_size
+
+# NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS or ((NR_STATIONS * (NR_STATIONS - 1)) / 2) * (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) * NR_CHANNELS
+# small params: (10 * 9) / 2) * (128 * 2) * 16 = 184320
+# big params:   (48 * 47) / 2) * (128 * 4) * 16 = 9240576
+# visibilities = 184320
+visibilities = 9240576
 
 # the width of the bars of the plots
 width = 0.1
@@ -51,7 +56,7 @@ def read_data(path, type=None):
             line = list(line.strip().split(" "))
 
             if line == [""] or devcloud_test[0] == "#": continue
-            if it > 1: file_data.append(float(line[-1]))
+            if it > 0: file_data.append(float(line[-1]))
             it += 1
 
         data.append(file_data)
@@ -88,19 +93,19 @@ def plot_object_create(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
 
     ax.set_ylabel('Execution time (in nanoseconds)')
     ax.set_xlabel('Different implementations and hardware')
-    ax.set_title('Execution time of the object creation averaged over 10 runs')
+    ax.set_title('Execution time of the object creation averaged over 20 runs')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
     plt.grid(True)
 
     fig.tight_layout()
-    plt.savefig(path + "plots/creation_time.png")
+    plt.savefig(path + "plots/" + data_size + "creation_time.png")
 
     plt.yscale('log')
-    ax.set_title('Execution time of the object creation averaged over 10 runs in log scale')
+    ax.set_title('Execution time of the object creation averaged over 20 runs in log scale')
     plt.tight_layout()
-    plt.savefig(path + "plots/creation_time_log.png")
+    plt.savefig(path + "plots/" + data_size + "creation_time_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -145,19 +150,19 @@ def plot_object_init(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Execution time (in nanoseconds)')
     ax.set_xlabel('Different implementations and hardware')
-    ax.set_title('Execution time of the object initialisation averaged over 10 runs')
+    ax.set_title('Execution time of the object initialisation averaged over 20 runs')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
     plt.grid(True)
 
     fig.tight_layout()
-    plt.savefig(path + "plots/init_time.png")
+    plt.savefig(path + "plots/" + data_size + "init_time.png")
 
     plt.yscale('log')
-    ax.set_title('Execution time of the object initialisation averaged over 10 runs in log scale')
+    ax.set_title('Execution time of the object initialisation averaged over 20 runs in log scale')
     plt.tight_layout()
-    plt.savefig(path + "plots/init_time_log.png")
+    plt.savefig(path + "plots/" + data_size + "init_time_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -191,19 +196,19 @@ def plot_kernel_duration(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
 
     ax.set_ylabel('Visibilities per second')
     ax.set_xlabel('Different implementations and hardware')
-    ax.set_title('100 Kernel iterations averaged over 10 runs expressed as visibilities per second (higher is better)')
+    ax.set_title('A kernel iteration averaged over 20 runs expressed as visibilities per second (higher is better)')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
     plt.grid(True)
 
     fig.tight_layout()
-    plt.savefig(path + "plots/kernel_duration.png")
+    plt.savefig(path + "plots/" + data_size + "kernel_duration.png")
 
     plt.yscale('log')
-    ax.set_title('100 Kernel iterations averaged over 10 runs in log scale expressed as visibilities per second (higher is better)')
+    ax.set_title('A kernel iteration averaged over 20 runs in log scale expressed as visibilities per second (higher is better)')
     plt.tight_layout()
-    plt.savefig(path + "plots/kernel_duration_log.png")
+    plt.savefig(path + "plots/" + data_size + "kernel_duration_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -278,19 +283,19 @@ def plot_total(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
 
     ax.set_ylabel('Execution time (in nanoseconds)')
     ax.set_xlabel('Different implementations and hardware')
-    ax.set_title('Object creation and initialisation averaged over 10 runs expressed in nanoseconds')
+    ax.set_title('Object creation and initialisation averaged over 20 runs expressed in nanoseconds')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend()
     plt.grid(True)
 
     fig.tight_layout()
-    plt.savefig(path + "plots/total_minus_kernel.png")
+    plt.savefig(path + "plots/" + data_size + "total_minus_kernel.png")
 
     plt.yscale('log')
-    ax.set_title('Object creation and initialisation averaged over 10 runs expressed in nanoseconds in log scale')
+    ax.set_title('Object creation and initialisation averaged over 20 runs expressed in nanoseconds in log scale')
     plt.tight_layout()
-    plt.savefig(path + "plots/total_minus_kernel_log.png")
+    plt.savefig(path + "plots/" + data_size + "total_minus_kernel_log.png")
 
     # NOTE: we make a separate plot for this to also compare creation and initialisation.
     ax.bar(x - (width * 2), i5_data_st3[0], width, yerr=i5_data_st3[1], color='lightcyan', edgecolor='k', bottom=i5_bottom2)
@@ -300,14 +305,14 @@ def plot_total(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     ax.bar(x + (width * 2), iris_data_st3[0], width, yerr=iris_data_st3[1], color='lightpink', edgecolor='k', bottom=iris_bottom2)
 
     plt.yscale('linear')
-    ax.set_title('Program duration averaged over 10 runs expressed in nanoseconds')
+    ax.set_title('Program duration averaged over 20 runs expressed in nanoseconds')
     fig.tight_layout()
-    plt.savefig(path + "plots/total.png")
+    plt.savefig(path + "plots/" + data_size + "total.png")
 
     plt.yscale('log')
-    ax.set_title('Program duration averaged over 10 runs expressed in nanoseconds in log scale')
+    ax.set_title('Program duration averaged over 20 runs expressed in nanoseconds in log scale')
     plt.tight_layout()
-    plt.savefig(path + "plots/total_log.png")
+    plt.savefig(path + "plots/" + data_size + "total_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------

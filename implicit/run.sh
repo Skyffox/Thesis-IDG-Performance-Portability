@@ -1,1 +1,1 @@
-./run-gridder 1
+./run-gridder

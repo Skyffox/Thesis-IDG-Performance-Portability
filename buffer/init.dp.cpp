@@ -2,9 +2,9 @@
 
 
 void initialize_uvw(
-    std::array<float, NR_BASELINES * NR_TIMESTEPS>& u_arr,
-    std::array<float, NR_BASELINES * NR_TIMESTEPS>& v_arr,
-    std::array<float, NR_BASELINES * NR_TIMESTEPS>& w_arr)
+    std::vector<float>& u_arr,
+    std::vector<float>& v_arr,
+    std::vector<float>& w_arr)
 {
     for (unsigned bl = 0; bl < NR_BASELINES; bl++) {
         // Get random radius
@@ -48,8 +48,8 @@ void initialize_wavenumbers(
 
 void initialize_visibilities(
     const std::array<double, NR_CHANNELS> frequencies,
-    const std::array<float, NR_BASELINES * NR_TIMESTEPS> uCoor,
-    const std::array<float, NR_BASELINES * NR_TIMESTEPS> vCoor,
+    std::vector<float>& uCoor,
+    std::vector<float>& vCoor,
     std::vector<std::array<std::complex<float>, 4>>& visibilities)
 {
     float x_offset = 0.6 * GRID_SIZE;
@@ -108,7 +108,7 @@ void initialize_spheroidal(
 
 void initialize_aterms(
     const std::array<float, SUBGRID_SIZE * SUBGRID_SIZE> spheroidal,
-    std::array<std::array<std::complex<float>, 4>, NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE>& aterms)
+    std::vector<std::array<std::complex<float>, 4>>& aterms)
 {
     for (unsigned ts = 0; ts < NR_TIMESLOTS; ts++) {
         for (unsigned station = 0; station < NR_STATIONS; station++) {
@@ -157,7 +157,7 @@ void initialize_metadata(
 }
 
 void initialize_subgrids(
-    std::array<std::complex<float>, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE>& subgrid)
+    std::vector<std::complex<float>>& subgrid)
 {
 	// Initialize subgrids
 	for (unsigned s = 0; s < NR_SUBGRIDS; s++) {
