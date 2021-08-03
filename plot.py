@@ -15,8 +15,8 @@ from os.path import isfile, join
 
 path = "/home/julius/Downloads/idg-fpga-master/thesis/"
 
-# data_size = "small_param/"
-data_size = "big_param/"
+data_size = "small_param/"
+# data_size = "big_param/"
 
 path_buffer = path + "buffer/output/" + data_size
 path_ref = path + "reference/output/" + data_size
@@ -26,8 +26,8 @@ path_implicit = path + "implicit/output/" + data_size
 # NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS or ((NR_STATIONS * (NR_STATIONS - 1)) / 2) * (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) * NR_CHANNELS
 # small params: (10 * 9) / 2) * (128 * 2) * 16 = 184320
 # big params:   (48 * 47) / 2) * (128 * 4) * 16 = 9240576
-# visibilities = 184320
-visibilities = 9240576
+visibilities = 184320
+# visibilities = 9240576
 
 # the width of the bars of the plots
 width = 0.1
@@ -102,10 +102,10 @@ def plot_object_create(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     fig.tight_layout()
     plt.savefig(path + "plots/" + data_size + "creation_time.png")
 
-    plt.yscale('log')
-    ax.set_title('Execution time of the object creation averaged over 20 runs in log scale')
-    plt.tight_layout()
-    plt.savefig(path + "plots/" + data_size + "creation_time_log.png")
+    # plt.yscale('log')
+    # ax.set_title('Execution time of the object creation averaged over 20 runs in log scale')
+    # plt.tight_layout()
+    # plt.savefig(path + "plots/" + data_size + "creation_time_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -159,10 +159,10 @@ def plot_object_init(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     fig.tight_layout()
     plt.savefig(path + "plots/" + data_size + "init_time.png")
 
-    plt.yscale('log')
-    ax.set_title('Execution time of the object initialisation averaged over 20 runs in log scale')
-    plt.tight_layout()
-    plt.savefig(path + "plots/" + data_size + "init_time_log.png")
+    # plt.yscale('log')
+    # ax.set_title('Execution time of the object initialisation averaged over 20 runs in log scale')
+    # plt.tight_layout()
+    # plt.savefig(path + "plots/" + data_size + "init_time_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -205,10 +205,10 @@ def plot_kernel_duration(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     fig.tight_layout()
     plt.savefig(path + "plots/" + data_size + "kernel_duration.png")
 
-    plt.yscale('log')
-    ax.set_title('A kernel iteration averaged over 20 runs in log scale expressed as visibilities per second (higher is better)')
-    plt.tight_layout()
-    plt.savefig(path + "plots/" + data_size + "kernel_duration_log.png")
+    # plt.yscale('log')
+    # ax.set_title('A kernel iteration averaged over 20 runs in log scale expressed as visibilities per second (higher is better)')
+    # plt.tight_layout()
+    # plt.savefig(path + "plots/" + data_size + "kernel_duration_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -292,10 +292,10 @@ def plot_total(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     fig.tight_layout()
     plt.savefig(path + "plots/" + data_size + "total_minus_kernel.png")
 
-    plt.yscale('log')
-    ax.set_title('Object creation and initialisation averaged over 20 runs expressed in nanoseconds in log scale')
-    plt.tight_layout()
-    plt.savefig(path + "plots/" + data_size + "total_minus_kernel_log.png")
+    # plt.yscale('log')
+    # ax.set_title('Object creation and initialisation averaged over 20 runs expressed in nanoseconds in log scale')
+    # plt.tight_layout()
+    # plt.savefig(path + "plots/" + data_size + "total_minus_kernel_log.png")
 
     # NOTE: we make a separate plot for this to also compare creation and initialisation.
     ax.bar(x - (width * 2), i5_data_st3[0], width, yerr=i5_data_st3[1], color='lightcyan', edgecolor='k', bottom=i5_bottom2)
@@ -309,10 +309,10 @@ def plot_total(buf_i5, buf_gold, buf_plat, buf_gen9, buf_iris,
     fig.tight_layout()
     plt.savefig(path + "plots/" + data_size + "total.png")
 
-    plt.yscale('log')
-    ax.set_title('Program duration averaged over 20 runs expressed in nanoseconds in log scale')
-    plt.tight_layout()
-    plt.savefig(path + "plots/" + data_size + "total_log.png")
+    # plt.yscale('log')
+    # ax.set_title('Program duration averaged over 20 runs expressed in nanoseconds in log scale')
+    # plt.tight_layout()
+    # plt.savefig(path + "plots/" + data_size + "total_log.png")
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
