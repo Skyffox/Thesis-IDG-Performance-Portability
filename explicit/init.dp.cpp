@@ -53,7 +53,7 @@ void initialize_visibilities(
     double frequencies[NR_CHANNELS],
     float uCoor[NR_BASELINES * NR_TIMESTEPS],
     float vCoor[NR_BASELINES * NR_TIMESTEPS],
-    std::array<std::complex<float>, 4> *visibilities)
+    std::array<std::complex<float>, 4> visibilities[NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS])
 {
     float x_offset = 0.6 * GRID_SIZE;
     float y_offset = 0.7 * GRID_SIZE;
@@ -160,7 +160,7 @@ void initialize_metadata(
 }
 
 void initialize_subgrids(
-    std::complex<float> *subgrids)
+    std::complex<float> subgrids[NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE])
 {
 	// Initialize subgrids
 	for (unsigned s = 0; s < NR_SUBGRIDS; s++) {

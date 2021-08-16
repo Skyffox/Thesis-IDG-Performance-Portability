@@ -9,8 +9,8 @@
 #define IMAGE_SIZE           0.01f
 #define W_STEP               0
 #define NR_CHANNELS          16 // number of channels per subgrid
-#define NR_STATIONS          10
-#define NR_TIMESLOTS         2
+#define NR_STATIONS          10 // NOTE: small param uses 10 and big param 48
+#define NR_TIMESLOTS         2 // NOTE: small param uses 2 and big param 4
 #define NR_TIMESTEPS_SUBGRID 128 // number of timesteps per subgrid
 #define NR_TIMESTEPS         (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) // number of timesteps per baseline
 #define NR_BASELINES         ((NR_STATIONS * (NR_STATIONS - 1)) / 2)
@@ -33,7 +33,7 @@ void initialize_visibilities(
     double frequencies[NR_CHANNELS],
     float u[NR_BASELINES * NR_TIMESTEPS],
     float v[NR_BASELINES * NR_TIMESTEPS],
-    std::array<std::complex<float>, 4> *visibilities);
+    std::array<std::complex<float>, 4> visibilities[NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS]);
 
 void initialize_baselines(
     std::array<int, 2> stations[NR_BASELINES]);
@@ -50,4 +50,4 @@ void initialize_metadata(
     std::array<int, 9> metadata[NR_BASELINES * NR_TIMESLOTS]);
 
 void initialize_subgrids(
-    std::complex<float> *subgrid);
+    std::complex<float> subgrid[NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE]);

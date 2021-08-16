@@ -14,81 +14,66 @@ using namespace sycl;
 using namespace std::chrono;
 
 
-class CustomDeviceSelector : public device_selector {
-    public:
-        int operator()(const device &dev) const override {
-            int device_rating = 0;
-            // In the below code we are querying for the custom device. We query for a
-            if (dev.is_gpu()) {
-                device_rating = 2;
-            } else if (dev.is_cpu()) {
-                device_rating = 1;
-            }
-            return device_rating;
-        };
-};
-
-
-void output_dev_info(const device& dev, const std::string& selector_name) {
+void output_dev_info(const device& dev) {
     std::cout << ">> Selected device: " << dev.get_info<info::device::name>() << "\n";
-    std::cout << ">> The Device Max Work Group Size is: " << dev.get_info<info::device::max_work_group_size>() << "\n";
-    std::cout << ">> The Device Max Compute Units is: " << dev.get_info<info::device::max_compute_units>() << "\n";
 }
 
 
 int main(int argc, char **argv)
 {
-    if (argc != 2) {
-        printf("Usage: ./program kernel_iterations\n");
-        exit(0);
-    }
-
-    // Create queue to push work to an accelerator
-    // queue q( cpu_selector{} );
-
-    // NOTE: if we want to run on a custom device
-    queue q( CustomDeviceSelector{} );
-
-    // Extra info of the device
-    output_dev_info(device{CustomDeviceSelector{}}, "custom_selector" );
+    queue q( default_selector{} );
+    output_dev_info(device{ default_selector{} });
 
     // NOTE host arrays
-    auto begin_create_host = high_resolution_clock::now();
-    float u[NR_BASELINES * NR_TIMESTEPS];
-    float v[NR_BASELINES * NR_TIMESTEPS];
-    float w[NR_BASELINES * NR_TIMESTEPS];
-    double frequencies[NR_CHANNELS];
-    float wavenumbers[NR_CHANNELS];
-    std::array<int, 2> stations[NR_BASELINES];
-    float spheroidal[SUBGRID_SIZE * SUBGRID_SIZE];
-    // std::array<std::complex<float>, 4> aterms[NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE];
-    std::array<int, 9> metadata[NR_BASELINES * NR_TIMESLOTS];
-    // std::array<std::complex<float>, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE> subgrid;
-    auto end_create_host = high_resolution_clock::now();
+    auto begin_create_host = steady_clock::now();
+    float* u = new float[NR_BASELINES * NR_TIMESTEPS];
+    float* v = new float[NR_BASELINES * NR_TIMESTEPS];
+    float* w = new float[NR_BASELINES * NR_TIMESTEPS];
+    double* frequencies = new double[NR_CHANNELS];
+    float* wavenumbers = new float[NR_CHANNELS];
+    std::array<int, 2>* stations = new std::array<int, 2>[NR_BASELINES];
+    float* spheroidal = new float[SUBGRID_SIZE * SUBGRID_SIZE];
+    std::array<std::complex<float>, 4>* visibilities = new std::array<std::complex<float>, 4>[NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS];
+    std::array<std::complex<float>, 4>* aterms = new std::array<std::complex<float>, 4>[NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE];
+    std::array<int, 9>* metadata = new std::array<int, 9>[NR_BASELINES * NR_TIMESLOTS];
+    std::complex<float>* subgrid = new std::complex<float>[NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE];
+    auto end_create_host = steady_clock::now();
 
-    // NOTE device arrays
-    auto begin_create_device = high_resolution_clock::now();
-    float *device_u = (float *) malloc_device(NR_BASELINES * NR_TIMESTEPS * sizeof(float), q);
-    float *device_v = (float *) malloc_device(NR_BASELINES * NR_TIMESTEPS * sizeof(float), q);
-    float *device_w = (float *) malloc_device(NR_BASELINES * NR_TIMESTEPS * sizeof(float), q);
-    float *device_wavenumbers = (float *) malloc_device(NR_CHANNELS * sizeof(float), q);
+    // NOTE alloc memory on device
+    auto begin_create_device = steady_clock::now();
+    auto device_u = malloc_device<float>(NR_BASELINES * NR_TIMESTEPS, q);
+    q.memset(device_u, 0, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
 
-    // NOTE: The visiblities and subgrid arrays are simply too big to copy so I will just use a shared array to make it easier for myself
-    std::array<std::complex<float>, 4> *visibilities = (std::array<std::complex<float>, 4> *) malloc_shared(NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS * sizeof(float) * 8, q);
-    std::complex<float> *subgrid = (std::complex<float> *) malloc_shared(NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2, q);
-    std::array<std::complex<float>, 4> *aterms = (std::array<std::complex<float>, 4> *) malloc_shared(NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 8, q);
+    auto device_v = malloc_device<float>(NR_BASELINES * NR_TIMESTEPS, q);
+    q.memset(device_v, 0, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
 
-    float *device_spheroidal = (float *) malloc_device(SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float), q);
-    // std::array<std::complex<float>, 4> *device_aterms = (std::array<std::complex<float>, 4> *) malloc_device(NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 8, q);
-    std::array<int, 9> *device_metadata = (std::array<int, 9> *) malloc_device(NR_BASELINES * NR_TIMESLOTS * sizeof(int) * 9, q);
-    // std::complex<float> *device_subgrid = (std::complex<float> *) malloc_device(NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2, q);
-    auto end_create_device = high_resolution_clock::now();
+    auto device_w = malloc_device<float>(NR_BASELINES * NR_TIMESTEPS, q);
+    q.memset(device_w, 0, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
+
+    auto device_wavenumbers = malloc_device<float>(NR_CHANNELS, q);
+    q.memset(device_wavenumbers, 0, NR_CHANNELS * sizeof(float)).wait();
+
+    auto device_visibilities = malloc_device<std::array<std::complex<float>, 4>>(NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS, q);
+    q.memset(device_visibilities, 0, NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS * sizeof(float) * 8).wait();
+
+    auto device_spheroidal = malloc_device<float>(SUBGRID_SIZE * SUBGRID_SIZE, q);
+    q.memset(device_spheroidal, 0, SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float)).wait();
+
+    auto device_aterms = malloc_device<std::array<std::complex<float>, 4>>(NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE, q);
+    q.memset(device_aterms, 0, NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 8).wait();
+
+    auto device_metadata = malloc_device<std::array<int, 9>>(NR_BASELINES * NR_TIMESLOTS, q);
+    q.memset(device_metadata, 0, NR_BASELINES * NR_TIMESLOTS * sizeof(int) * 9).wait();
+
+    auto device_subgrid = malloc_device<std::complex<float>>(NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE, q);
+    q.memset(device_subgrid, 0, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2).wait();
+    auto end_create_device = steady_clock::now();
 
     // Initialize random number generator.
     srand(0);
 
     // std::cout << ">>> Initialize data structures on host" << std::endl;
-    auto begin_init = high_resolution_clock::now();
+    auto begin_init = steady_clock::now();
     initialize_uvw(u, v, w);
     initialize_frequencies(frequencies);
     initialize_wavenumbers(frequencies, wavenumbers);
@@ -98,7 +83,7 @@ int main(int argc, char **argv)
     initialize_aterms(spheroidal, aterms);
     initialize_metadata(stations, metadata);
     initialize_subgrids(subgrid);
-    auto end_init = high_resolution_clock::now();
+    auto end_init = steady_clock::now();
 
     // printUVW(u, v, w);               // NOTE: Prints a lot
     // printFrequencies(frequencies);
@@ -111,34 +96,37 @@ int main(int argc, char **argv)
     // printSubgrid(subgrid);          // NOTE: Prints a lot
 
     // copy from host to device
-    auto begin_copy_to_device = high_resolution_clock::now();
-    q.memcpy(device_u, &u, NR_BASELINES * NR_TIMESTEPS * sizeof(float));
-    q.memcpy(device_v, &v, NR_BASELINES * NR_TIMESTEPS * sizeof(float));
-    q.memcpy(device_w, &w, NR_BASELINES * NR_TIMESTEPS * sizeof(float));
-    q.memcpy(device_wavenumbers, &wavenumbers, NR_CHANNELS * sizeof(float));
-    q.memcpy(device_spheroidal, &spheroidal, SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float));
-    // q.memcpy(device_aterms, &aterms, NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 8);
-    q.memcpy(device_metadata, &metadata, NR_BASELINES * NR_TIMESLOTS * sizeof(int) * 9);
-    // q.memcpy(device_subgrid, &subgrid, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2);
-    q.wait();
-    auto end_copy_to_device = high_resolution_clock::now();
+    auto begin_copy_to_device = steady_clock::now();
+    q.memcpy(device_u, u, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
+    q.memcpy(device_v, v, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
+    q.memcpy(device_w, w, NR_BASELINES * NR_TIMESTEPS * sizeof(float)).wait();
+    q.memcpy(device_wavenumbers, wavenumbers, NR_CHANNELS * sizeof(float)).wait();
+    q.memcpy(device_spheroidal, spheroidal, SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float)).wait();
+    q.memcpy(device_visibilities, visibilities, NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS * sizeof(float) * 8).wait();
+    q.memcpy(device_aterms, aterms, NR_TIMESLOTS * NR_STATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 8).wait();
+    q.memcpy(device_metadata, metadata, NR_BASELINES * NR_TIMESLOTS * sizeof(int) * 9).wait();
+    q.memcpy(device_subgrid, subgrid, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2).wait();
+    auto end_copy_to_device = steady_clock::now();
+
+    // WARMUP
+    kernel_gridder(
+        q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
+        device_u, device_v, device_w, device_wavenumbers, visibilities, device_spheroidal,
+        aterms, device_metadata, subgrid
+    );
 
     // Run reference
-    auto begin_kernel = high_resolution_clock::now();
-    for (int i = 0; i <  atoi(argv[1]); i++) {
-        // std::cout << "hey" << std::endl;
-        kernel_gridder(
-            q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
-            device_u, device_v, device_w, device_wavenumbers, visibilities, device_spheroidal,
-            aterms, device_metadata, subgrid
-        );
-    }
-    auto end_kernel = high_resolution_clock::now();
+    auto begin_kernel = steady_clock::now();
+    kernel_gridder(
+        q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
+        device_u, device_v, device_w, device_wavenumbers, device_visibilities, device_spheroidal,
+        device_aterms, device_metadata, device_subgrid
+    );
+    auto end_kernel = steady_clock::now();
 
-    auto begin_copy_to_host = high_resolution_clock::now();
-    // q.memcpy(&subgrid, device_subgrid, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2);
-    // q.wait();
-    auto end_copy_to_host = high_resolution_clock::now();
+    auto begin_copy_to_host = steady_clock::now();
+    q.memcpy(subgrid, device_subgrid, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE * sizeof(float) * 2).wait();
+    auto end_copy_to_host = steady_clock::now();
 
     auto create_time_host = duration_cast<nanoseconds>(end_create_host - begin_create_host).count();
     auto create_time_device = duration_cast<nanoseconds>(end_create_device - begin_create_device).count();
@@ -147,7 +135,6 @@ int main(int argc, char **argv)
     auto kernel_time = duration_cast<nanoseconds>(end_kernel - begin_kernel).count();
     auto copy_to_host = duration_cast<nanoseconds>(end_copy_to_host - begin_copy_to_host).count();
 
-    std::cout << ">>> Kernel iterations: " <<  atoi(argv[1]) << std::endl;
     std::cout << ">> Object creation (host): " << create_time_host << std::endl;
     std::cout << ">> Object creation (device): " << create_time_device << std::endl;
     std::cout << ">> Object initialisation: " << init_time << std::endl;
@@ -156,18 +143,16 @@ int main(int argc, char **argv)
     std::cout << ">> D2H: " << copy_to_host << std::endl;
     std::cout << std::endl;
 
-    // Print subgrids for checking the gridder
-    // printSubgrid(subgrid);
-
     // NOTE only free the device arrays
     free(device_u, q);
     free(device_v, q);
     free(device_w, q);
     free(device_wavenumbers, q);
     free(device_spheroidal, q);
-    // free(device_aterms, q);
+    free(device_visibilities, q);
+    free(device_aterms, q);
     free(device_metadata, q);
-    // free(device_subgrid, q);
+    free(device_subgrid, q);
 
     return EXIT_SUCCESS;
 }

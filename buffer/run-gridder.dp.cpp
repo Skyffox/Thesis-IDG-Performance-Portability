@@ -21,11 +21,6 @@ void output_dev_info(const device& dev) {
 
 int main(int argc, char **argv)
 {
-    // if (argc != 2) {
-    //     printf("Usage: ./program kernel_iterations\n");
-    //     exit(0);
-    // }
-
     queue q( default_selector{} );
     output_dev_info(device{ default_selector{} });
 
@@ -92,13 +87,11 @@ int main(int argc, char **argv)
 
     // Run the buffer gridder
     auto begin_kernel = steady_clock::now();
-    // for (int i = 0; i < atoi(argv[1]); i++) {
     kernel_gridder(
         q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
         UCoordinate_buf, VCoordinate_buf, WCoordinate_buf, wavenumbers_buf,
         visibilities_buf, spheroidal_buf, aterms_buf, metadata_buf, subgrids_buf
     );
-    // }
     subgrids_buf.get_access<access::mode::read>(); // <--- Host Accessor to Synchronize Memory
     auto end_kernel = steady_clock::now();
 
@@ -107,7 +100,6 @@ int main(int argc, char **argv)
     auto buffer_time = duration_cast<nanoseconds>(end_buffer - begin_buffer).count();
     auto kernel_time = duration_cast<nanoseconds>(end_kernel - begin_kernel).count();
 
-    // std::cout << ">> Kernel iterations: " << atoi(argv[1]) << std::endl;
     std::cout << ">> Object creation: " << create_time << std::endl;
     std::cout << ">> Object initialisation: " << init_time << std::endl;
     std::cout << ">> Buffer: " << buffer_time << std::endl;

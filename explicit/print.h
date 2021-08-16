@@ -46,7 +46,7 @@ void printWavenumbers(
 }
 
 void printVisibilities(
-    std::vector<std::array<std::complex<float>, 4>> visibilities)
+    std::array<std::complex<float>, 4> visibilities[NR_BASELINES * NR_TIMESTEPS * NR_CHANNELS])
 {
     std::cout << ">>> Printing all Visibilities." << std::endl;
     for (unsigned bl = 0; bl < NR_BASELINES; bl++) {
@@ -146,7 +146,7 @@ void printMetadata(
 }
 
 void printSubgrid(
-    std::array<std::complex<float>, NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE> subgrid)
+    std::complex<float> subgrid[NR_SUBGRIDS * NR_CORRELATIONS * SUBGRID_SIZE * SUBGRID_SIZE])
 {
     for (unsigned s = 0; s < NR_SUBGRIDS; s++) {
         for (unsigned y = 0; y < SUBGRID_SIZE; y++) {

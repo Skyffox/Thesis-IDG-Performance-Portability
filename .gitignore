@@ -1,3 +1,4 @@
 run-gridder
 run-gridder-cpu
 run-gridder-gpu
+run-compare
