@@ -1,0 +1,84 @@
+u140585@s001-n160:~/clpeak$ ./fp32.x
+>> Platform: Intel(R) FPGA Emulation Platform for OpenCL(TM)
+>> Device: Intel(R) FPGA Emulation Device
+	Device type     : 8
+	Driver version  : 2021.13.11.0.23_160000
+	Compute units   : 12
+	Clock frequency : 3700 MHz
+
+     float:     139.21 ms,     185.11 GFLOPS
+    float2:     439.47 ms,      58.64 GFLOPS
+    float4:     215.76 ms,     119.44 GFLOPS
+    float8:     132.22 ms,     194.90 GFLOPS
+   float16:     100.03 ms,     257.62 GFLOPS
+
+
+>> Platform: Intel(R) OpenCL
+>> Device: Intel(R) Xeon(R) E-2176G CPU @ 3.70GHz
+	Device type     : 2
+	Driver version  : 2021.13.11.0.23_160000
+	Compute units   : 12
+	Clock frequency : 3700 MHz
+
+     float:      34.11 ms,     188.86 GFLOPS
+    float2:     105.82 ms,      60.88 GFLOPS
+    float4:      62.44 ms,     103.17 GFLOPS
+    float8:      32.03 ms,     201.11 GFLOPS
+   float16:      27.53 ms,     234.02 GFLOPS
+
+
+>> Platform: Intel(R) OpenCL HD Graphics
+>> Device: Intel(R) UHD Graphics P630 [0x3e96]
+	Device type     : 4
+	Driver version  : 21.49.21786
+	Compute units   : 24
+	Clock frequency : 1200 MHz
+
+     float:     106.36 ms,     484.60 GFLOPS
+    float2:     107.05 ms,     481.45 GFLOPS
+    float4:     123.74 ms,     416.52 GFLOPS
+    float8:     130.60 ms,     394.65 GFLOPS
+   float16:     104.83 ms,     491.65 GFLOPS
+
+
+u140585@s011-n007:~/clpeak$ ./fp32.x
+>> Platform: Intel(R) FPGA Emulation Platform for OpenCL(TM)
+>> Device: Intel(R) FPGA Emulation Device
+	Device type     : 8
+	Driver version  : 2021.13.11.0.23_160000
+	Compute units   : 24
+	Clock frequency : 3500 MHz
+
+     float:      55.29 ms,     932.22 GFLOPS
+    float2:     331.57 ms,     155.44 GFLOPS
+    float4:     166.31 ms,     309.90 GFLOPS
+    float8:     101.50 ms,     507.77 GFLOPS
+   float16:      29.99 ms,    1718.62 GFLOPS
+
+
+>> Platform: Intel(R) OpenCL
+>> Device: Intel(R) Core(TM) i9-10920X CPU @ 3.50GHz
+	Device type     : 2
+	Driver version  : 2021.13.11.0.23_160000
+	Compute units   : 24
+	Clock frequency : 3500 MHz
+
+     float:      13.37 ms,     963.60 GFLOPS
+    float2:      82.76 ms,     155.69 GFLOPS
+    float4:      41.37 ms,     311.43 GFLOPS
+    float8:      25.34 ms,     508.47 GFLOPS
+   float16:       7.40 ms,    1741.50 GFLOPS
+
+
+>> Platform: Intel(R) OpenCL HD Graphics
+>> Device: Intel(R) Iris(R) Xe MAX Graphics [0x4905]
+	Device type     : 4
+	Driver version  : 21.49.21786
+	Compute units   : 96
+	Clock frequency : 1550 MHz
+
+     float:      58.05 ms,    3551.43 GFLOPS
+    float2:      58.09 ms,    3549.11 GFLOPS
+    float4:      58.14 ms,    3545.64 GFLOPS
+    float8:      58.28 ms,    3537.26 GFLOPS
+   float16:      58.58 ms,    3519.42 GFLOPS

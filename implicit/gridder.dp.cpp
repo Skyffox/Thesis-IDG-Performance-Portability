@@ -6,6 +6,46 @@
 using namespace sycl;
 
 
+void kernel_gridder_empty(
+    queue       q,
+    const int   nr_subgrids,
+    const int   grid_size,
+    const int   subgrid_size,
+    const float image_size,
+    const float w_step_in_lambda,
+    const int   nr_channels,
+    const int   nr_stations,
+    float                              *u,
+    float                              *v,
+    float                              *w,
+    float                              *wavenumbers,
+    std::array<std::complex<float>, 4> *visibilities,
+    float                              *spheroidal,
+    std::array<std::complex<float>, 4> *aterms,
+    std::array<int, 9>                 *metadata,
+    std::complex<float>                *subgrid)
+{
+    // Find offset of first subgrid
+    const int baseline_offset_1 = metadata[0][0];
+
+    // Iterate all subgrids
+    q.submit([&](handler &h) {
+        h.parallel_for(nr_subgrids, [=](id<1> s) {
+            const std::array<int, 9> m = metadata[s];
+            const int time_offset      = (m[0] - baseline_offset_1) + m[1];
+            const int nr_timesteps     = m[2];
+            const int aterm_index      = m[3];
+            const int station1         = m[4];
+            const int station2         = m[5];
+            const int x_coordinate     = m[6];
+            const int y_coordinate     = m[7];
+            const float w_offset_in_lambda = w_step_in_lambda * (m[8] + 0.5);
+        }); // end parallel_for
+    }); // end submit
+    q.wait();
+}  // end kernel_gridder
+
+
 void kernel_gridder(
     queue       q,
     const int   nr_subgrids,

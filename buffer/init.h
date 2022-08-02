@@ -9,8 +9,8 @@
 #define IMAGE_SIZE           0.01f
 #define W_STEP               0
 #define NR_CHANNELS          16 // number of channels per subgrid
-#define NR_STATIONS          10 // NOTE: small param uses 10 and big param 48
-#define NR_TIMESLOTS         2 // NOTE: small param uses 2 and big param 4
+#define NR_STATIONS          48 // NOTE: small param uses 10 and big param 48
+#define NR_TIMESLOTS         4 // NOTE: small param uses 2 and big param 4
 #define NR_TIMESTEPS_SUBGRID 128 // number of timesteps per subgrid
 #define NR_TIMESTEPS         (NR_TIMESTEPS_SUBGRID * NR_TIMESLOTS) // number of timesteps per baseline
 #define NR_BASELINES         ((NR_STATIONS * (NR_STATIONS - 1)) / 2)

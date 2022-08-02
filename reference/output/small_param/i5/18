@@ -1,4 +1,5 @@
->> Object creation: 19354
->> Object initialisation: 13166006
->> Kernel duration: 1491275253
+>> Object creation:         26624
+>> Object initialisation:   17038780
+>> Kernel duration (empty): 1183794
+>> Kernel duration:         1947572559
 

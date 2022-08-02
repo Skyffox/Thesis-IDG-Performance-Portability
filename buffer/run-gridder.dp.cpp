@@ -15,14 +15,15 @@ using namespace std::chrono;
 
 
 void output_dev_info(const device& dev) {
-    std::cout << ">>> Selected device: " << dev.get_info<info::device::name>() << "\n";
+    std::cout << ">> Selected device: " << dev.get_info<info::device::name>() << "\n";
 }
 
 
 int main(int argc, char **argv)
 {
-    queue q( default_selector{} );
-    output_dev_info(device{ default_selector{} });
+    // NOTE: Important to change cpu and gpu selector as they have a different background than default
+    queue q( cpu_selector{} );
+    output_dev_info(device{ cpu_selector{} });
 
     // NOTE: Because we test for a large amount of timeslots/stations at one point we decided to convert all big arrays
     // that are affected to vectors as we would otherwise have a Stack Overflow. As a results the following measurement
@@ -78,32 +79,37 @@ int main(int argc, char **argv)
     // printMetadata(metadata);
     // printSubgrid(subgrids);          // NOTE: Prints a lot
 
-    // WARMUP
-    kernel_gridder(
+    // Test empty kernel for communication speed
+    auto begin_kernel_empty = steady_clock::now();
+    kernel_gridder_empty(
         q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
         UCoordinate_buf, VCoordinate_buf, WCoordinate_buf, wavenumbers_buf,
         visibilities_buf, spheroidal_buf, aterms_buf, metadata_buf, subgrids_buf
     );
+    auto end_kernel_empty = steady_clock::now();
 
     // Run the buffer gridder
     auto begin_kernel = steady_clock::now();
+    // Your code to measure
     kernel_gridder(
         q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
         UCoordinate_buf, VCoordinate_buf, WCoordinate_buf, wavenumbers_buf,
         visibilities_buf, spheroidal_buf, aterms_buf, metadata_buf, subgrids_buf
     );
-    subgrids_buf.get_access<access::mode::read>(); // <--- Host Accessor to Synchronize Memory
+    subgrids_buf.get_access<access::mode::read>(); // Host Accessor to Synchronize Memory
     auto end_kernel = steady_clock::now();
 
     auto create_time = duration_cast<nanoseconds>(end_create - begin_create).count();
     auto init_time = duration_cast<nanoseconds>(end_init - begin_init).count();
     auto buffer_time = duration_cast<nanoseconds>(end_buffer - begin_buffer).count();
+    auto kernel_time_empty = duration_cast<nanoseconds>(end_kernel_empty - begin_kernel_empty).count();
     auto kernel_time = duration_cast<nanoseconds>(end_kernel - begin_kernel).count();
 
-    std::cout << ">> Object creation: " << create_time << std::endl;
-    std::cout << ">> Object initialisation: " << init_time << std::endl;
-    std::cout << ">> Buffer: " << buffer_time << std::endl;
-    std::cout << ">> Kernel duration: " << kernel_time << std::endl;
+    std::cout << ">> Object creation:         " << create_time << std::endl;
+    std::cout << ">> Object initialisation:   " << init_time << std::endl;
+    std::cout << ">> Buffer:                  " << buffer_time << std::endl;
+    std::cout << ">> Kernel duration (empty): " << kernel_time_empty << std::endl;
+    std::cout << ">> Kernel duration:         " << kernel_time << std::endl;
     std::cout << std::endl;
 
     return EXIT_SUCCESS;

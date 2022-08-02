@@ -6,6 +6,54 @@
 using namespace sycl;
 
 
+void kernel_gridder_empty(
+    queue       q,
+    const int   nr_subgrids,
+    const int   grid_size,
+    const int   subgrid_size,
+    const float image_size,
+    const float w_step_in_lambda,
+    const int   nr_channels,
+    const int   nr_stations,
+    sycl::buffer<float, 1, sycl::detail::aligned_allocator<char>, void> UCoordinate,
+    sycl::buffer<float, 1, sycl::detail::aligned_allocator<char>, void> VCoordinate,
+    sycl::buffer<float, 1, sycl::detail::aligned_allocator<char>, void> WCoordinate,
+    sycl::buffer<float, 1, sycl::detail::aligned_allocator<char>, void> wavenumbers,
+    sycl::buffer<std::array<std::complex<float>, 4>, 1, sycl::detail::aligned_allocator<char>, void> visibilities,
+    sycl::buffer<float, 1, sycl::detail::aligned_allocator<char>, void> spheroidal,
+    sycl::buffer<std::array<std::complex<float>, 4>, 1, sycl::detail::aligned_allocator<char>, void> aterms,
+    sycl::buffer<std::array<int, 9>, 1, sycl::detail::aligned_allocator<char>, void> metadata,
+    sycl::buffer<std::complex<float>, 1, sycl::detail::aligned_allocator<char>, void>& subgrids)
+{
+    // Iterate all subgrids
+    q.submit([&](handler &h) {
+        // Make stuff faster if the compiler knows how we want to access the data
+        auto UCoordinate_acc = UCoordinate.get_access<access::mode::read>(h);
+        auto VCoordinate_acc = VCoordinate.get_access<access::mode::read>(h);
+        auto WCoordinate_acc = WCoordinate.get_access<access::mode::read>(h);
+        auto wavenumbers_acc = wavenumbers.get_access<access::mode::read>(h);
+        auto visibilities_acc = visibilities.get_access<access::mode::read>(h);
+        auto spheroidal_acc = spheroidal.get_access<access::mode::read>(h);
+        auto aterms_acc = aterms.get_access<access::mode::read>(h);
+        auto metadata_acc = metadata.get_access<access::mode::read>(h);
+        auto subgrid_acc = subgrids.get_access<access::mode::write>(h);
+
+        h.parallel_for(nr_subgrids, [=](id<1> s) {
+            const std::array<int, 9> m = metadata_acc[s];
+            const int time_offset      = (m[0] - metadata_acc[0][0]) + m[1];
+            const int nr_timesteps     = m[2];
+            const int aterm_index      = m[3];
+            const int station1         = m[4];
+            const int station2         = m[5];
+            const int x_coordinate     = m[6];
+            const int y_coordinate     = m[7];
+            const float w_offset_in_lambda = w_step_in_lambda * (m[8] + 0.5);
+        }); // end parallel_for
+    }); // end submit
+    q.wait(); // Have to invoke a wait to copy back, believe this is because of the vector in use.
+}  // end kernel_gridder
+
+
 void kernel_gridder(
     queue       q,
     const int   nr_subgrids,

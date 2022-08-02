@@ -21,8 +21,8 @@ void output_dev_info(const device& dev) {
 
 int main(int argc, char **argv)
 {
-    queue q( default_selector{} );
-    output_dev_info(device{ default_selector{} });
+    queue q( cpu_selector{} );
+    output_dev_info(device{ cpu_selector{} });
 
     auto begin_create = steady_clock::now();
     float *u = (float *) malloc_shared(NR_BASELINES * NR_TIMESTEPS * sizeof(float), q);
@@ -63,11 +63,13 @@ int main(int argc, char **argv)
     // printMetadata(metadata);
     // printSubgrid(subgrid);          // NOTE: Prints a lot
 
-    // WARMUP
-    kernel_gridder(
+    // Test empty kernel for communication speed
+    auto begin_kernel_empty = steady_clock::now();
+    kernel_gridder_empty(
         q, NR_SUBGRIDS, GRID_SIZE, SUBGRID_SIZE, IMAGE_SIZE, W_STEP, NR_CHANNELS, NR_STATIONS,
         u, v, w, wavenumbers, visibilities, spheroidal, aterms, metadata, subgrid
     );
+    auto end_kernel_empty = steady_clock::now();
 
     // Run gridder
     auto begin_kernel = steady_clock::now();
@@ -79,11 +81,13 @@ int main(int argc, char **argv)
 
     auto create_time = duration_cast<nanoseconds>(end_create - begin_create).count();
     auto init_time = duration_cast<nanoseconds>(end_init - begin_init).count();
+    auto kernel_time_empty = duration_cast<nanoseconds>(end_kernel_empty - begin_kernel_empty).count();
     auto kernel_time = duration_cast<nanoseconds>(end_kernel - begin_kernel).count();
 
-    std::cout << ">> Object creation: " << create_time << std::endl;
-    std::cout << ">> Object initialisation: " << init_time << std::endl;
-    std::cout << ">> Kernel duration: " << kernel_time << std::endl;
+    std::cout << ">> Object creation:         " << create_time << std::endl;
+    std::cout << ">> Object initialisation:   " << init_time << std::endl;
+    std::cout << ">> Kernel duration (empty): " << kernel_time_empty << std::endl;
+    std::cout << ">> Kernel duration:         " << kernel_time << std::endl;
     std::cout << std::endl;
 
     free(u, q);

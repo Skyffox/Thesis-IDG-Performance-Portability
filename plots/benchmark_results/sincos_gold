@@ -1,0 +1,12 @@
+     1:0:   304.37 ms,  1378.02 GFLOPS/s,   689.01 GFMAS/s,     0.00 GSINCOS/s,   689.01 GOPS/s
+     0:1: 14179.01 ms,     0.00 GFLOPS/s,     0.00 GFMAS/s,     7.40 GSINCOS/s,     7.40 GOPS/s
+     1:1: 13851.00 ms,    15.14 GFLOPS/s,     7.57 GFMAS/s,     7.57 GSINCOS/s,    15.14 GOPS/s
+     2:1: 13910.95 ms,    30.15 GFLOPS/s,    15.08 GFMAS/s,     7.54 GSINCOS/s,    22.61 GOPS/s
+     4:1: 14006.67 ms,    59.89 GFLOPS/s,    29.95 GFMAS/s,     7.49 GSINCOS/s,    37.43 GOPS/s
+     8:1: 14485.40 ms,   115.82 GFLOPS/s,    57.91 GFMAS/s,     7.24 GSINCOS/s,    65.15 GOPS/s
+    16:1: 15059.13 ms,   222.82 GFLOPS/s,   111.41 GFMAS/s,     6.96 GSINCOS/s,   118.37 GOPS/s
+    32:1: 16799.82 ms,   399.46 GFLOPS/s,   199.73 GFMAS/s,     6.24 GSINCOS/s,   205.97 GOPS/s
+    64:1: 18610.55 ms,   721.19 GFLOPS/s,   360.60 GFMAS/s,     5.63 GSINCOS/s,   366.23 GOPS/s
+   128:1: 24547.08 ms,  1093.55 GFLOPS/s,   546.78 GFMAS/s,     4.27 GSINCOS/s,   551.05 GOPS/s
+   256:1: 40986.84 ms,  1309.86 GFLOPS/s,   654.93 GFMAS/s,     2.56 GSINCOS/s,   657.49 GOPS/s
+   512:1: 78668.50 ms,  1364.89 GFLOPS/s,   682.45 GFMAS/s,     1.33 GSINCOS/s,   683.78 GOPS/s

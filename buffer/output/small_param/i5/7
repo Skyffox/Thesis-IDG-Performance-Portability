@@ -1,6 +1,7 @@
->>> Selected device: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
->> Object creation: 4307940
->> Object initialisation: 8588039
->> Buffer: 3739334
->> Kernel duration: 1361049959
+>> Selected device: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+>> Object creation:         7374941
+>> Object initialisation:   9179761
+>> Buffer:                  3792707
+>> Kernel duration (empty): 368992036
+>> Kernel duration:         1882147780
 

@@ -1,0 +1,28 @@
+./bench-plain-native.x
+runtime = 1.11565 s, 369.574 GFlop/s, 461.968 GByte/s
+runtime = 1.11824 s, 368.718 GFlop/s, 460.898 GByte/s
+runtime = 1.0983 s, 375.413 GFlop/s, 469.266 GByte/s
+./bench-plain-sse.x
+runtime = 2.77146 s, 148.772 GFlop/s, 185.965 GByte/s
+runtime = 2.80507 s, 146.99 GFlop/s, 183.737 GByte/s
+runtime = 2.75147 s, 149.853 GFlop/s, 187.316 GByte/s
+./bench-plain-avx.x
+runtime = 1.53322 s, 268.922 GFlop/s, 336.153 GByte/s
+runtime = 1.44676 s, 284.993 GFlop/s, 356.241 GByte/s
+runtime = 1.48399 s, 277.844 GFlop/s, 347.305 GByte/s
+./bench-plain-avx2.x
+runtime = 1.12992 s, 364.908 GFlop/s, 456.135 GByte/s
+runtime = 1.19596 s, 344.758 GFlop/s, 430.948 GByte/s
+runtime = 1.1595 s, 355.599 GFlop/s, 444.499 GByte/s
+./bench-intrin-sse.x
+runtime = 2.58899 s, 159.258 GFlop/s, 199.072 GByte/s
+runtime = 2.57305 s, 160.244 GFlop/s, 200.306 GByte/s
+runtime = 2.62365 s, 157.154 GFlop/s, 196.443 GByte/s
+./bench-intrin-avx.x
+runtime = 1.34343 s, 306.914 GFlop/s, 383.642 GByte/s
+runtime = 1.42317 s, 289.717 GFlop/s, 362.147 GByte/s
+runtime = 1.3561 s, 304.045 GFlop/s, 380.056 GByte/s
+./bench-intrin-avx2.x
+runtime = 0.815339 s, 505.7 GFlop/s, 632.125 GByte/s
+runtime = 0.858711 s, 480.158 GFlop/s, 600.198 GByte/s
+runtime = 0.873722 s, 471.909 GFlop/s, 589.886 GByte/s
