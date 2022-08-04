@@ -102,7 +102,7 @@ def plot_template(ref_i5, ref_gold, ref_plat, ref_gen9, ref_gen9cpu, ref_iris, r
     fig.set_figwidth(15)
     fig.set_figheight(8)
 
-    if plot == "kernel_vis" or plot == "empty_kernel_vis":
+    if type == "kernel_vis" or type == "empty_kernel_vis":
         ax.bar(x - (width * 3), np.divide(visibilities, i5_data[0]), width, label='Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz', edgecolor='k')
         ax.bar(x - (width * 2), np.divide(visibilities, gold_data[0]), width, label='Intel(R) Xeon(R) Gold 6128 CPU @ 3.40GHz', edgecolor='k')
         ax.bar(x - width, np.divide(visibilities, plat_data[0]), width, label='Intel(R) Xeon(R) Platinum 8153 CPU @ 2.00GHz', edgecolor='k')
@@ -188,6 +188,11 @@ gen9_buf    = read_data(path_buffer + "gen9/", type="buf")
 gen9cpu_buf = read_data(path_buffer + "gen9cpu/", type="buf")
 iris_buf    = read_data(path_buffer + "iris/", type="buf")
 iriscpu_buf = read_data(path_buffer + "iriscpu/", type="buf")
+
+# NOTE: for big param we need empty iris data since we cant run it.
+# iris_ref = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+# iris_impl = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+# iris_buf = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
 
 # Plot the object creation
 plot_template(i5_ref[0], gold_ref[0], plat_ref[0], gen9cpu_ref[0], iriscpu_ref[0], gen9_ref[0], iris_ref[0], \
