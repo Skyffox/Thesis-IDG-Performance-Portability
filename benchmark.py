@@ -4,7 +4,7 @@ from subprocess import Popen, PIPE
 
 # home_dir = "/home/julius/Downloads/idg-fpga-master/thesis/"
 home_dir = "/home/u136839/thesis/"
-device = "iris"
+device = "i5"
 
 # NOTE: switch between: skl, ram384gb (platinum), gen9 and iris_xe_max
 # NOTE: make sure to have the gpu_selector for gpu tasks

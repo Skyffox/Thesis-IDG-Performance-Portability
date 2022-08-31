@@ -21,7 +21,7 @@ void output_dev_info(const device& dev) {
 
 int main(int argc, char **argv)
 {
-    // NOTE: Important to change cpu and gpu selector as they have a different background than default
+    // NOTE: Change between cpu_selector and gpu_selector
     queue q( cpu_selector{} );
     output_dev_info(device{ cpu_selector{} });
 

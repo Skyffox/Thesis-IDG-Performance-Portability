@@ -12,25 +12,6 @@
 using namespace std::chrono;
 
 
-void printSubgrid(idg::Array4D<std::complex<float>>& subgrids) {
-
-    unsigned nr_correlations = subgrids.get_z_dim();
-    unsigned width = subgrids.get_x_dim();
-    unsigned height = subgrids.get_y_dim();
-
-    for (unsigned s = 0; s < NR_SUBGRIDS; s++) {
-        for (unsigned y = 0; y < height; y++) {
-            for (unsigned x = 0; x < width; x++) {
-                for (unsigned c = 0; c < nr_correlations; c++) {
-                    std::complex<float> pixel = subgrids(s, c, y, x);
-                    std::cout << pixel << std::endl;
-                }
-            }
-        }
-    }
-}
-
-
 int main(int argc, char **argv)
 {
     auto begin_create = steady_clock::now();
